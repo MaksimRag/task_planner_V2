@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{% if project %}Редактирование проекта{% else %}Новый проект{% endif %}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- Вот здесь проверка на наличие проекта -->
+        <h1>{% if project %}Редактировать проект{% else %}Новый проект{% endif %}</h1>
+
+        {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{% if project %}{{ url_for('edit_project', project_id=project.id) }}{% else %}{{ url_for('new_project') }}{% endif %}">
+            <div class="form-group">
+                <label for="title">Название</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Например: Работа"
+                    required
+                    autofocus
+                    maxlength="100"
+                    value="{{ project.title if project else request.form.get('title', '') }}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="4"
+                    placeholder="Необязательно"
+                >{{ project.description if project else request.form.get('description', '') }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                {% if project %}Сохранить изменения{% else %}Создать проект{% endif %}
+            </button>
+        </form>
+
+        <!-- БЛОК УДАЛЕНИЯ (показывается только для существующего проекта) -->
+        {% if project %}
+            <form method="POST" action="{{ url_for('delete_project_route', project_id=project.id) }}" 
+                  onsubmit="return confirm('Вы уверены, что хотите удалить этот проект? ВНИМАНИЕ: Все задачи внутри этого проекта также будут удалены безвозвратно.');"
+                  style="margin-top: 20px; border-top: 2px solid var(--border); padding-top: 20px;">
+                <button type="submit" class="btn btn-secondary" 
+                        style="width: 100%; border-color: var(--danger-border); color: var(--danger-text);">
+                    Удалить проект
+                </button>
+            </form>
+        {% endif %}
+
+        <p class="auth-link">
+            <a href="{{ url_for('projects_list') }}">← Назад к проектам</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper" style="max-width: 800px;">
+    
+    <div class="page-header">
+        <h1>Просмотр задачи</h1>
+        <div class="page-header-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">← Назад к списку</a>
+            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-primary">Редактировать</a>
+        </div>
+    </div>
+
+    <div class="auth-card" style="padding: 30px;">
+        <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 28px;">{{ task.title }}</h2>
+        
+        <div class="task-meta" style="margin-bottom: 30px;">
+            <span class="badge badge-{{ task.priority }}">{{ task.priority }}</span>
+            <span class="badge badge-{{ task.status }}">{{ task.status }}</span>
+            {% if task.due_date %}
+                <span class="badge" style="background: var(--bg);">Дедлайн: {{ task.due_date.strftime('%d.%m.%Y %H:%M') }}</span>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <h3 style="color: var(--muted); font-size: 14px; text-transform: uppercase; margin-bottom: 10px;">Описание</h3>
+            <p style="white-space: pre-wrap; line-height: 1.6; background: var(--bg); padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border);">{{ task.description or 'Описание отсутствует.' }}</p>
+        </div>
+
+        <div class="task-info">
+            <p><strong>Проект:</strong> {{ project_name or 'Без проекта' }}</p>
+            <p><strong>Создана:</strong> {{ task.created_at.strftime('%d.%m.%Y %H:%M') if task.created_at else '—' }}</p>
+            <p><strong>Завершена:</strong> {{ task.completed_at.strftime('%d.%m.%Y %H:%M') if task.completed_at else '—' }}</p>
+        </div>
+        
+        <!-- Форма удаления прямо на странице просмотра -->
+        <form method="POST" action="{{ url_for('delete_task_route', task_id=task.id) }}" 
+              onsubmit="return confirm('Вы уверены, что хотите безвозвратно удалить эту задачу?');"
+              style="margin-top: 30px; border-top: 2px solid var(--border); padding-top: 20px;">
+            <button type="submit" class="btn btn-secondary" 
+                    style="width: 100%; border-color: var(--danger-border); color: var(--danger-text);">
+                Удалить задачу
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
