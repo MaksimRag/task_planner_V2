@@ -21,7 +21,7 @@
 ### 2. Клонирование репозитория
 
 ```bash
-git clone [https://github.com/ВАШ_ЛОГИН/task_planner_V2.git](https://github.com/ВАШ_ЛОГИН/task_planner_V2.git)
+git clone [https://github.com/MaksimRAG/task_planner_V2.git](https://github.com/MaksimRAG/task_planner_V2.git)
 cd task_planner_V2
 ```
 
@@ -38,12 +38,6 @@ source .venv/bin/activate
 ```
 
 ### 4. Установка зависимостей
-
-```bash
-pip install -r requirements.txt
-```
-
-Если файла `requirements.txt` нет, установите зависимости вручную:
 
 ```bash
 pip install flask psycopg2-binary werkzeug
