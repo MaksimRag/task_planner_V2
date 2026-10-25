@@ -73,9 +73,15 @@
                     </div>
                 {% endfor %}
             {% else %}
+                <!-- ОБНОВЛЕННОЕ ПУСТОЕ СОСТОЯНИЕ -->
                 <div class="empty-state">
-                    <p>У вас пока нет задач.</p>
-                    <a href="{{ url_for('new_task') }}" class="btn btn-primary">Создать первую</a>
+                    {% if projects|length == 0 %}
+                        <p>Чтобы создать задачу, сначала нужен проект.</p>
+                        <a href="{{ url_for('new_project') }}" class="btn btn-primary">Создать проект</a>
+                    {% else %}
+                        <p>У вас пока нет задач.</p>
+                        <a href="{{ url_for('new_task') }}" class="btn btn-primary">Создать первую</a>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

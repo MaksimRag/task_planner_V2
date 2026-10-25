@@ -18,6 +18,9 @@ def index():
     view = request.args.get('view', 'list')
 
     tasks = db.get_tasks_filtered(user_id, search=search, sort=sort)
+    
+    # Получаем проекты, чтобы знать, есть ли они вообще
+    projects = db.get_projects_by_user(user_id)
 
     if view == 'board':
         grouped = {
@@ -28,12 +31,14 @@ def index():
         return render_template('index.html',
                                login=session['login'],
                                tasks=tasks,
+                               projects=projects, # <--- ПЕРЕДАЕМ ПРОЕКТЫ
                                grouped=grouped,
                                search=search, sort=sort, view=view)
 
     return render_template('index.html',
                            login=session['login'],
                            tasks=tasks,
+                           projects=projects, # <--- ПЕРЕДАЕМ ПРОЕКТЫ
                            search=search, sort=sort, view=view)
 
 
@@ -184,6 +189,9 @@ def new_project():
         return redirect(url_for('login'))
 
     user_id = session['user_id']
+    
+    # Читаем next из GET (при переходе) или из POST (при отправке формы)
+    next_page = request.args.get('next') or request.form.get('next')
 
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
@@ -193,7 +201,12 @@ def new_project():
             return render_template('project_form.html', error='Название обязательно')
 
         db.insert_into_project(user_id, title, description)
-        return redirect(url_for('index'))
+        
+        # ВОТ ЭТА ПРОВЕРКА ВОЗВРАЩАЕТ ОБРАТНО
+        if next_page == 'new_task':
+            return redirect(url_for('new_task'))
+            
+        return redirect(url_for('projects_list'))
 
     return render_template('project_form.html')
 

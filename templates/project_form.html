@@ -5,7 +5,6 @@
 {% block content %}
 <div class="auth-container">
     <div class="auth-card">
-        <!-- Вот здесь проверка на наличие проекта -->
         <h1>{% if project %}Редактировать проект{% else %}Новый проект{% endif %}</h1>
 
         {% if error %}
@@ -13,6 +12,10 @@
         {% endif %}
 
         <form method="POST" action="{% if project %}{{ url_for('edit_project', project_id=project.id) }}{% else %}{{ url_for('new_project') }}{% endif %}">
+            
+            <!-- СКРЫТОЕ ПОЛЕ: передает параметр next на сервер -->
+            <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+
             <div class="form-group">
                 <label for="title">Название</label>
                 <input
@@ -42,7 +45,6 @@
             </button>
         </form>
 
-        <!-- БЛОК УДАЛЕНИЯ (показывается только для существующего проекта) -->
         {% if project %}
             <form method="POST" action="{{ url_for('delete_project_route', project_id=project.id) }}" 
                   onsubmit="return confirm('Вы уверены, что хотите удалить этот проект? ВНИМАНИЕ: Все задачи внутри этого проекта также будут удалены безвозвратно.');"
@@ -55,7 +57,11 @@
         {% endif %}
 
         <p class="auth-link">
-            <a href="{{ url_for('projects_list') }}">← Назад к проектам</a>
+            {% if request.args.get('next') == 'new_task' %}
+                <a href="{{ url_for('new_task') }}">← Назад к созданию задачи</a>
+            {% else %}
+                <a href="{{ url_for('projects_list') }}">← Назад к проектам</a>
+            {% endif %}
         </p>
     </div>
 </div>
