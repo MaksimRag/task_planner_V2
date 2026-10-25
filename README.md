@@ -15,10 +15,10 @@
 ## 🎥 Демонстрация работы
 
 ### Вход и отображение задач.
-<video src="docs/demo_1.mp4" controls width="100%"></video>
+[![Посмотреть видео (Вход и задачи)](docs/preview_1.png)](docs/demo_1.mp4)
 
 ### Создание нового проекта и задачи, а также их удаление.
-<video src="docs/demo_2.mp4" controls width="100%"></video>
+[![Посмотреть видео (Создание и удаление)](docs/preview_2.png)](docs/demo_2.mp4)
 
 
 ## 📸 Скриншоты
